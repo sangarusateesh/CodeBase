@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>API Calling Page</title>
+	</head>
+	<body bgcolor="grey" align="center">
+		<marquee><h1 style="font-weight: bold; ">API Calling Through Javascript</h1></marquee>
+		<form name="apiForm">
+			<input type="text" name="pincode" placeholder="Please Enter Pincode"><br><br>
+			<input type="button" onclick="apiFunc()" value="get Details">
+		</form>
+		<br><br>
+		<div id="tdata"></div>
+		<script type="text/javascript">
+			function apiFunc(){
+				var message = '';
+				let pincode = document.apiForm.pincode.value;
+				if(pincode == '' || pincode.length<6){
+					alert('Please enter Pincode');return false;
+				}
+				let theUrl = 'https://api.postalpincode.in/pincode/'+pincode;
+				var xmlHttp = new XMLHttpRequest();
+			    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+			    xmlHttp.send( null );
+
+			    let response = xmlHttp.responseText;
+			    let res = JSON.parse(response);
+			    var data = res[0]['PostOffice'];
+			    message +='<table border="1">';
+			    	message +='<tr>';
+			    		message+='<th>Pincode</th>';
+			    		message+='<th>Post Office Name</th>';
+			    		message+='<th>Branch Type</th>';
+			    		message+='<th>Block</th>';
+			    		message+='<th>Circle</th>';
+			    		message+='<th>Division</th>';
+			    		message+='<th>District</th>';
+			    		message+='<th>Region</th>';
+			    		message+='<th>State</th>';
+			    		message+='<th>Delivery Status</th>';
+			    		message+='<th>Description</th>';
+		    		message+='</tr>';
+		    		message+='<tbody>';
+				    	for(var i=0;i<data.length;i++){
+				    		message+='<tr>';
+					    		message+='<td>'+data[i]['Pincode']+'</td>';
+					    		message+='<td>'+data[i]['Name']+'</td>';
+					    		message+='<td>'+data[i]['BranchType']+'</td>';
+					    		message+='<td>'+data[i]['Block']+'</td>';
+					    		message+='<td>'+data[i]['Circle']+'</td>';
+					    		message+='<td>'+data[i]['Division']+'</td>';
+					    		message+='<td>'+data[i]['District']+'</td>';
+					    		message+='<td>'+data[i]['Region']+'</td>';
+					    		message+='<td>'+data[i]['State']+'</td>';
+					    		message+='<td>'+data[i]['DeliveryStatus']+'</td>';
+					    		message+='<td>'+data[i]['Description']+'</td>';
+				    		message+='</tr>';
+				    	}
+		    		message+='</tbody>';
+		    	message +='</table>';
+		    	document.getElementById("tdata").innerHTML = message;
+			}
+		</script>
+	</body>
+</html>
